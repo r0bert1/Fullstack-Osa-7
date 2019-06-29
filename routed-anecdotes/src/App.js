@@ -8,6 +8,13 @@ const Menu = ({ anecdotes }) => {
   const padding = {
     paddingRight: 5
   }
+  const anecdoteById = (id) => {
+    return (
+      anecdotes.find(anecdote => anecdote.id === id)
+    )
+  }
+  
+
   return (
     <div>
       <Router>
@@ -17,9 +24,12 @@ const Menu = ({ anecdotes }) => {
             <Link style={padding} to="/create">create new</Link>
             <Link style={padding} to="/about">about</Link>
           </div>
-          <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
+          <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />        
           <Route path="/create" render={() => <CreateNew />} />
           <Route path="/about" render={() => <About />} />
+          <Route path="/anecdotes/:id" render={({ match }) =>
+            <Anecdote anecdote={anecdoteById(match.params.id)} />
+          } />
         </div>
       </Router>
     </div>
@@ -27,13 +37,27 @@ const Menu = ({ anecdotes }) => {
 }
 
 const AnecdoteList = ({ anecdotes }) => {
-  console.log(anecdotes)
-  return ( 
+  
+  return (
     <div>
       <h2>Anecdotes</h2>
       <ul>
-        {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+        {anecdotes.map(anecdote => 
+          <li key={anecdote.id} >
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>
+        )}
       </ul>
+    </div>
+  )
+}
+
+const Anecdote = ({ anecdote }) => {
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p> for more info see <a href={anecdote.info}>{anecdote.info}</a> </p>
     </div>
   )
 }
@@ -61,6 +85,7 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
+  const test = ``
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -137,8 +162,6 @@ const App = () => {
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
-
-  console.log(anecdotes)
 
   return (
     <div>
