@@ -8,7 +8,7 @@ import Togglable from './components/Togglable'
 import { useField } from './hooks'
 
 const App = () => {
-  const [username] = useField('text')
+  const [username] = useField('username')
   const [password] = useField('password')
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
@@ -32,6 +32,7 @@ const App = () => {
   }, [])
 
   const notify = (message, type = 'success') => {
+    console.log(message)
     setNotification({ message, type })
     setTimeout(() => setNotification({ message: null }), 10000)
   }

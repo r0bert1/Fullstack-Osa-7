@@ -31,8 +31,8 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.4",
-    "eslint-plugin-jest": "^22.7.2",
-    "jest-dom": "^4.0.0"
+    "eslint-plugin-jest": "^22.7.2"
   }
 }
