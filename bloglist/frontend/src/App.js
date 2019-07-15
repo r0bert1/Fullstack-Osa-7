@@ -20,7 +20,7 @@ const App = () => {
     blogService.getAll().then(blogs => {
       setBlogs(blogs)
     })
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -61,13 +61,7 @@ const App = () => {
   const createBlog = async (blog) => {
     newBlogRef.current.toggleVisibility()
     const createdBlog = await blogService.create(blog)
-    const userObj = {
-      id: createdBlog.user,
-      name: user.name,
-      username: user.username
-    }
-    const withUserObj = { ...createdBlog, user: userObj }
-    setBlogs(blogs.concat(withUserObj))
+    setBlogs(blogs.concat(createdBlog))
     notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
   }
 
