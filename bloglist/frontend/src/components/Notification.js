@@ -1,12 +1,13 @@
-import React from 'react' 
+import React from 'react'
+import { connect } from 'react-redux'
 
-const Notification = ({ store }) => {
-  if (store.getState().message === null) {
+const Notification = (props) => {
+  if (props.notification.message === null) {
     return null
   }
 
   const style = {
-    color: store.getState().type === 'error' ? 'red' : 'green',
+    color: props.notification.type === 'error' ? 'red' : 'green',
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
@@ -17,9 +18,13 @@ const Notification = ({ store }) => {
 
   return (
     <div style={style}>
-      {store.getState().message}
+      {props.notification.message}
     </div>
   )
 }
 
-export default Notification
+const mapStateToProps = (state) => {
+  return { notification: state.notification }
+}
+
+export default connect(mapStateToProps)(Notification)
