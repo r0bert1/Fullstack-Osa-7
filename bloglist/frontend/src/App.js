@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -9,11 +9,11 @@ import Togglable from './components/Togglable'
 import { useField } from './hooks'
 import { setNotification, clearNotification } from './reducers/notificationReducer'
 import { addBlog, remove, like, initializeBlogs } from './reducers/blogReducer'
+import { login, logout } from './reducers/loginReducer'
 
 const App = (props) => {
   const [username] = useField('username')
   const [password] = useField('password')
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
     props.initializeBlogs()
@@ -23,7 +23,7 @@ const App = (props) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      props.login(user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -45,14 +45,14 @@ const App = (props) => {
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      props.login(user)
     } catch (exception) {
       notify('wrong username or password', 'error')
     }
   }
 
   const handleLogout = () => {
-    setUser(null)
+    props.logout()
     blogService.destroyToken()
     window.localStorage.removeItem('loggedBlogAppUser')
   }
@@ -67,7 +67,7 @@ const App = (props) => {
   const likeBlog = async (blog) => {
     const likedBlog = { ...blog, likes: blog.likes + 1}
     const updatedBlog = await blogService.update(likedBlog)
-    props.like(blog)
+    props.like(likedBlog)
     notify(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
   }
 
@@ -80,7 +80,7 @@ const App = (props) => {
     }
   }
 
-  if (user === null) {
+  if (props.user === null) {
     return (
       <div>
         <h2>log in to application</h2>
@@ -112,7 +112,7 @@ const App = (props) => {
 
       <Notification />
 
-      <p>{user.name} logged in</p>
+      <p>{props.user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
 
       <Togglable buttonLabel='create new' ref={newBlogRef}>
@@ -125,8 +125,8 @@ const App = (props) => {
           blog={blog}
           like={likeBlog}
           remove={removeBlog}
-          user={user}
-          creator={blog.user.username === user.username}
+          user={props.user}
+          creator={blog.user.username === props.user.username}
         />
       )}
     </div>
@@ -134,7 +134,10 @@ const App = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return { blogs: state.blogs }
+  return {
+    blogs: state.blogs,
+    user: state.user
+  }
 }
 
 const mapDispatchToProps = {
@@ -143,7 +146,9 @@ const mapDispatchToProps = {
   remove,
   like,
   setNotification,
-  clearNotification
+  clearNotification,
+  login,
+  logout
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
