@@ -8,7 +8,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 const reducer = combineReducers({
   blogs: blogReducer,
-  user: loginReducer,
+  loggedUser: loginReducer,
   users: userReducer,
   notification: notificationReducer
 })
