@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import { useField } from './hooks'
-import { setNotification, clearNotification } from './reducers/notificationReducer'
+import Blogs from './components/Blogs'
+import Users from './components/Users'
+import { setNotification } from './reducers/notificationReducer'
 import { addBlog, remove, like, initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/loginReducer'
+import {
+  BrowserRouter as Router,
+  Route, Link, Redirect, withRouter
+} from 'react-router-dom'
+
 
 const App = (props) => {
   const [username] = useField('username')
@@ -17,6 +21,7 @@ const App = (props) => {
 
   useEffect(() => {
     props.initializeBlogs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -26,14 +31,8 @@ const App = (props) => {
       props.login(user)
       blogService.setToken(user.token)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const notify = (message, type = 'success') => {
-    props.setNotification({ message, type })
-    setTimeout(() => {
-      props.clearNotification()
-    }, 10000)
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -47,7 +46,7 @@ const App = (props) => {
       blogService.setToken(user.token)
       props.login(user)
     } catch (exception) {
-      notify('wrong username or password', 'error')
+      props.setNotification('wrong username or password', 'error')
     }
   }
 
@@ -55,29 +54,6 @@ const App = (props) => {
     props.logout()
     blogService.destroyToken()
     window.localStorage.removeItem('loggedBlogAppUser')
-  }
-
-  const createBlog = async (blog) => {
-    newBlogRef.current.toggleVisibility()
-    const createdBlog = await blogService.create(blog)
-    props.addBlog(createdBlog)
-    notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
-  }
-
-  const likeBlog = async (blog) => {
-    const likedBlog = { ...blog, likes: blog.likes + 1}
-    const updatedBlog = await blogService.update(likedBlog)
-    props.like(likedBlog)
-    notify(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
-  }
-
-  const removeBlog = async (blog) => {
-    const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
-    if (ok) {
-      await blogService.remove(blog)
-      props.remove(blog)
-      notify(`blog ${blog.title} by ${blog.author} removed!`)
-    }
   }
 
   if (props.user === null) {
@@ -102,33 +78,21 @@ const App = (props) => {
     )
   }
 
-  const newBlogRef = React.createRef()
-
-  const byLikes = (b1, b2) => b2.likes - b1.likes
-
   return (
     <div>
-      <h2>blogs</h2>
+      <Router>
+        <div>
+          <h2>blogs</h2>
 
-      <Notification />
+          <Notification />
 
-      <p>{props.user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
+          <p>{props.user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
 
-      <Togglable buttonLabel='create new' ref={newBlogRef}>
-        <NewBlog createBlog={createBlog} />
-      </Togglable>
-
-      {props.blogs.sort(byLikes).map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          like={likeBlog}
-          remove={removeBlog}
-          user={props.user}
-          creator={blog.user.username === props.user.username}
-        />
-      )}
+          <Route exact path="/" render={() => <Blogs />} />
+          <Route path="/users" render={() => <Users />} />
+        </div>
+      </Router>
     </div>
   )
 }
@@ -146,7 +110,6 @@ const mapDispatchToProps = {
   remove,
   like,
   setNotification,
-  clearNotification,
   login,
   logout
 }
