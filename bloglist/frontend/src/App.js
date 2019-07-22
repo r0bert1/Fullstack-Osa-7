@@ -6,12 +6,13 @@ import Notification from './components/Notification'
 import { useField } from './hooks'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
+import User from './components/User'
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, remove, like, initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/loginReducer'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link
 } from 'react-router-dom'
 
 
@@ -78,6 +79,9 @@ const App = (props) => {
     )
   }
 
+  const userById = (id) =>
+    props.users.find(user => user.id === id)
+
   return (
     <div>
       <Router>
@@ -90,7 +94,10 @@ const App = (props) => {
           <button onClick={handleLogout}>logout</button>
 
           <Route exact path="/" render={() => <Blogs />} />
-          <Route path="/users" render={() => <Users />} />
+          <Route exact path="/users" render={() => <Users />} />
+          <Route exact path="/users/:id" render={({ match }) =>
+            <User user={userById(match.params.id)} />
+          } />
         </div>
       </Router>
     </div>
@@ -100,7 +107,8 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return {
     blogs: state.blogs,
-    user: state.loggedUser
+    user: state.loggedUser,
+    users: state.users
   }
 }
 
