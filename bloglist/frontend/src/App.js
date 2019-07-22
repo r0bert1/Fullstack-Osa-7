@@ -7,6 +7,7 @@ import { useField } from './hooks'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, remove, like, initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/loginReducer'
@@ -79,8 +80,8 @@ const App = (props) => {
     )
   }
 
-  const userById = (id) =>
-    props.users.find(user => user.id === id)
+  const findById = (id, data) =>
+    data.find(item => item.id === id)
 
   return (
     <div>
@@ -96,7 +97,10 @@ const App = (props) => {
           <Route exact path="/" render={() => <Blogs />} />
           <Route exact path="/users" render={() => <Users />} />
           <Route exact path="/users/:id" render={({ match }) =>
-            <User user={userById(match.params.id)} />
+            <User user={findById(match.params.id, props.users)} />
+          } />
+          <Route exact path="/blogs/:id" render={({ match }) =>
+            <Blog blog={findById(match.params.id, props.blogs)} />
           } />
         </div>
       </Router>

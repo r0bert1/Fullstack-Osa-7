@@ -1,15 +1,21 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const SimpleBlog = ({ blog, onClick }) => (
-  <div>
-    <div>
-      {blog.title} {blog.author}
+const SimpleBlog = ({ blog }) => {
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  return (
+    <div style={blogStyle}>
+      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
     </div>
-    <div>
-      blog has {blog.likes} likes
-      <button onClick={onClick}>like</button>
-    </div>
-  </div>
-)
+  )
+}
 
 export default SimpleBlog
