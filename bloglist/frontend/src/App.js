@@ -83,16 +83,30 @@ const App = (props) => {
   const findById = (id, data) =>
     data.find(item => item.id === id)
 
+  const padding = {
+    paddingRight: 5
+  }
+
+  const style = {
+    background: 'lightgrey',
+    padding: 10,
+    marginBottom: 10,
+  }
+
   return (
     <div>
       <Router>
         <div>
-          <h2>blogs</h2>
+          <div style={style}>
+            <Link style={padding} to="/">blogs</Link>
+            <Link style={padding} to="/users">users</Link>
+            {props.user.name} logged in
+            <button onClick={handleLogout}>logout</button>
+          </div>
+          
+          <h2>blog app</h2>
 
           <Notification />
-
-          <p>{props.user.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
 
           <Route exact path="/" render={() => <Blogs />} />
           <Route exact path="/users" render={() => <Users />} />
