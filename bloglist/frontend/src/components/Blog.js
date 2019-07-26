@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { like } from '../reducers/blogReducer'
+import { like, comment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import blogService from '../services/blogs'
 
@@ -16,7 +16,16 @@ const Blog = (props) => {
     props.setNotification(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
   }
 
-  const getId = () => Math.random() * 1000
+  const commentBlog = async (event) => {
+    event.preventDefault()
+    const comment = event.target.comment.value
+    const commentedBlog = { ...props.blog, comments: [ ...props.blog.comments, comment]}
+    await blogService.createComment(commentedBlog.id, comment)
+    props.comment(commentedBlog)
+  }
+
+  const generateKey = () =>
+    Number((Math.random() * 1000000).toFixed(0))
 
   return (
     <div>
@@ -27,9 +36,15 @@ const Blog = (props) => {
       </div>
       <div>added by {props.blog.user.name}</div>
       <h3>comments</h3>
+      
+      <form onSubmit={commentBlog}>
+          <input name="comment" />
+          <button type="submit">add comment</button>
+        </form>
+
       <ul>
         {props.blog.comments.map(comment => 
-          <li key={getId()}>
+          <li key={generateKey()}>
             {comment}
           </li>
         )}
@@ -46,6 +61,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   like,
+  comment,
   setNotification
 }
 

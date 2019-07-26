@@ -2,6 +2,7 @@ import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
   let id
+  let newState
   switch (action.type) {
     case 'CREATE_NEW':
       const newBlog = action.data.blog
@@ -13,7 +14,13 @@ const blogReducer = (state = [], action) => {
       return state.filter(blog => blog.id !== id)
     case 'LIKE':
       id = action.data.blog.id
-      const newState = state.map(blog =>
+      newState = state.map(blog =>
+        blog.id !== id ? blog : action.data.blog
+      )
+      return newState
+    case 'COMMENT':
+      id = action.data.blog.id
+      newState = state.map(blog =>
         blog.id !== id ? blog : action.data.blog
       )
       return newState
@@ -37,6 +44,13 @@ export const remove = (blog) => {
 }
 
 export const like = (blog) => {
+  return {
+    type: 'LIKE',
+    data: { blog }
+  }
+}
+
+export const comment = (blog) => {
   return {
     type: 'LIKE',
     data: { blog }
