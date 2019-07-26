@@ -16,6 +16,8 @@ const Blog = (props) => {
     props.setNotification(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
   }
 
+  const getId = () => Math.random() * 1000
+
   return (
     <div>
       <h2>{props.blog.title}</h2>
@@ -24,6 +26,14 @@ const Blog = (props) => {
         <button onClick={() => likeBlog(props.blog)}>like</button>
       </div>
       <div>added by {props.blog.user.name}</div>
+      <h3>comments</h3>
+      <ul>
+        {props.blog.comments.map(comment => 
+          <li key={getId()}>
+            {comment}
+          </li>
+        )}
+      </ul>
     </div>
   )
 }
