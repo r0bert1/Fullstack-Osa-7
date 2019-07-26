@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { like, comment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import blogService from '../services/blogs'
 
 const Blog = (props) => {
   if (props.blog === undefined) {
@@ -10,18 +9,14 @@ const Blog = (props) => {
   }
 
   const likeBlog = async (blog) => {
-    const likedBlog = { ...blog, likes: blog.likes + 1}
-    const updatedBlog = await blogService.update(likedBlog)
-    props.like(likedBlog)
-    props.setNotification(`blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
+    props.like(blog)
+    props.setNotification(`blog ${blog.title} by ${blog.author} liked!`)
   }
 
   const commentBlog = async (event) => {
     event.preventDefault()
     const comment = event.target.comment.value
-    const commentedBlog = { ...props.blog, comments: [ ...props.blog.comments, comment]}
-    await blogService.createComment(commentedBlog.id, comment)
-    props.comment(commentedBlog)
+    props.comment(props.blog, comment)
   }
 
   const generateKey = () =>
