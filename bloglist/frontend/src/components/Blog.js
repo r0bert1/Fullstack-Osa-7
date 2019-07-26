@@ -17,6 +17,7 @@ const Blog = (props) => {
     event.preventDefault()
     const comment = event.target.comment.value
     props.comment(props.blog, comment)
+    event.target.comment.value = ''
   }
 
   const generateKey = () =>
