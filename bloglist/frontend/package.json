@@ -18,7 +18,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +40,8 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.4",
-    "eslint-plugin-jest": "^22.7.2"
+    "eslint": "^6.1.0",
+    "eslint-plugin-jest": "^22.7.2",
+    "eslint-plugin-react": "^7.14.3"
   }
 }
