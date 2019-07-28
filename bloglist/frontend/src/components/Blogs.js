@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import SimpleBlog from './SimpleBlog'
+import { Table } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 import NewBlog from './NewBlog'
 import { addBlog, remove, like, initializeBlogs } from '../reducers/blogReducer'
@@ -25,12 +26,22 @@ const Blogs = (props) => {
         <NewBlog createBlog={createBlog} />
       </Togglable>
 
-      {props.blogs.sort(byLikes).map(blog =>
-        <SimpleBlog
-          key={blog.id}
-          blog={blog}
-        />
-      )}
+      <Table striped celled>
+        <Table.Body>
+          {props.blogs.sort(byLikes).map(blog =>
+            <Table.Row key={blog.id}>
+              <Table.Cell>
+                <Link to={`/blogs/${blog.id}`}>
+                  {blog.title}
+                </Link>
+              </Table.Cell>
+              <Table.Cell>
+                {blog.author}
+              </Table.Cell>
+            </Table.Row>
+          )}
+        </Table.Body>
+      </Table>
     </div>
   )
 }
