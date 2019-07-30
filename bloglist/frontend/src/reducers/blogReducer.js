@@ -12,10 +12,9 @@ const blogReducer = (state = [], action) => {
       return state.filter(blog => blog.id !== id)
     case 'UPDATE_BLOG':
       id = action.data.updatedBlog.id
-      const newState = state.map(blog =>
+      return state.map(blog =>
         blog.id !== id ? blog : action.data.updatedBlog
       )
-      return newState
     default:
       return state
   }
