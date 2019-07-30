@@ -2,7 +2,6 @@ import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
   let id
-  let newState
   switch (action.type) {
     case 'CREATE_NEW':
       const newBlog = action.data.blog
@@ -14,7 +13,7 @@ const blogReducer = (state = [], action) => {
       return state.filter(blog => blog.id !== id)
     case 'UPDATE_BLOG':
       id = action.data.updatedBlog.id
-      newState = state.map(blog =>
+      const newState = state.map(blog =>
         blog.id !== id ? blog : action.data.updatedBlog
       )
       return newState
