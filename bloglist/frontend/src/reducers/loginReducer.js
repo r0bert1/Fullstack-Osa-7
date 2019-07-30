@@ -1,8 +1,7 @@
 const loginReducer = (state = null, action) => {
   switch (action.type) {
     case 'LOGIN':
-      const loggedUser = action.data.user
-      return loggedUser
+      return action.data.user
     case 'LOGOUT':
       return null
     default:

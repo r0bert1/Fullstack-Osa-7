@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Container, Form, Button, Menu } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -60,49 +61,47 @@ const App = (props) => {
 
   if (props.user === null) {
     return (
-      <div>
+      <Container>
         <h2>log in to application</h2>
 
         <Notification />
 
-        <form onSubmit={handleLogin}>
-          <div>
-            käyttäjätunnus
-            <input {...username}/>
-          </div>
-          <div>
-            salasana
+        <Form onSubmit={handleLogin}>
+          <Form.Field>
+            <label>username:</label>
+            <input {...username} />
+          </Form.Field>
+          <Form.Field>
+            <label>password:</label>
             <input {...password} />
-          </div>
-          <button type="submit">kirjaudu</button>
-        </form>
-      </div>
+          </Form.Field>
+          <Button type='submit'>login</Button>
+        </Form>
+      </Container>
     )
   }
 
   const findById = (id, data) =>
     data.find(item => item.id === id)
 
-  const padding = {
-    paddingRight: 5
-  }
-
-  const style = {
-    background: 'lightgrey',
-    padding: 10,
-    marginBottom: 10,
-  }
-
   return (
-    <div>
+    <Container>
       <Router>
         <div>
-          <div style={style}>
-            <Link style={padding} to="/">blogs</Link>
-            <Link style={padding} to="/users">users</Link>
-            {props.user.name} logged in
-            <button onClick={handleLogout}>logout</button>
-          </div>
+          <Menu inverted>
+            <Menu.Item link>
+              <Link to="/">blogs</Link>
+            </Menu.Item>
+            <Menu.Item link>
+              <Link to="/users">users</Link>
+            </Menu.Item>
+            <Menu.Item>
+              <em>{props.user.name} logged in</em>
+            </Menu.Item>
+            <Menu.Item>
+              <Button onClick={handleLogout}>logout</Button>
+            </Menu.Item>
+          </Menu>
           
           <h2>blog app</h2>
 
@@ -118,7 +117,7 @@ const App = (props) => {
           } />
         </div>
       </Router>
-    </div>
+    </Container>
   )
 }
 

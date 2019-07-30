@@ -10,7 +10,7 @@ const Blog = (props) => {
 
   const likeBlog = async (blog) => {
     props.like(blog)
-    props.setNotification(`blog ${blog.title} by ${blog.author} liked!`)
+    props.setNotification(`${blog.title} by ${blog.author} liked!`)
   }
 
   const commentBlog = async (event) => {

@@ -4,8 +4,7 @@ const blogReducer = (state = [], action) => {
   let id
   switch (action.type) {
     case 'CREATE_NEW':
-      const newBlog = action.data.blog
-      return [...state, newBlog]
+      return [...state, action.data.blog]
     case 'INIT_BLOGS':
       return action.data.blogs
     case 'REMOVE':
