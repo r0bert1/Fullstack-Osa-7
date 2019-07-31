@@ -69,11 +69,11 @@ const App = (props) => {
         <Form onSubmit={handleLogin}>
           <Form.Field>
             <label>username:</label>
-            <input {...username} />
+            <input data-cy="username" {...username} />
           </Form.Field>
           <Form.Field>
             <label>password:</label>
-            <input {...password} />
+            <input data-cy="password" {...password} />
           </Form.Field>
           <Button type='submit'>login</Button>
         </Form>
