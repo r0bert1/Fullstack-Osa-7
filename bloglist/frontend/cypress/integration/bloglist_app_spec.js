@@ -51,5 +51,29 @@ describe('blog app', function() {
         .click()
       cy.contains('a blog created by cypress')
     })
+
+    describe('and a blog is created', function() {
+      beforeEach(function() {
+        cy.contains('create new')
+          .click()
+        cy.get('[data-cy=title]')
+          .type('a blog created by cypress')
+        cy.get('[data-cy=author]')
+          .type('cypress')
+        cy.get('[data-cy=url]')
+          .type('https://www.cypress.io/')
+        cy.get('[data-cy=create]')
+          .click()
+      })
+
+      it('liking increases like count with one', function() {
+        cy.get('Table').contains('a blog created by cypress')
+          .click()
+        cy.contains('0 likes')
+        cy.contains('like')
+          .click()
+        cy.contains('1 likes')
+      })
+    })
   })
 })
